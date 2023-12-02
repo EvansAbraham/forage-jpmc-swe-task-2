@@ -1,4 +1,4 @@
-# JPMorgan Chase & Co Software Engineering Job Virtual Job Simulation Task 2
+# JPMorgan Chase & Co Software Engineering Virtual Job Simulation Task 2
 
 ## Introduction
 
