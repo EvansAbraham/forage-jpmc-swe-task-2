@@ -23,7 +23,7 @@ from random import normalvariate, random
 from datetime import timedelta, datetime
 
 import csv
-import dateutil.parser
+from dateutil import parser
 import os.path
 
 import operator
@@ -162,7 +162,7 @@ def read_csv():
     """ Read a CSV or order history into a list. """
     with open('test.csv', 'rt') as f:
         for time, stock, side, order, size in csv.reader(f):
-            yield dateutil.parser.parse(time), stock, side, float(order), int(size)
+            yield parser.parse(time), stock, side, float(order), int(size)
 
 
 ################################################################################
@@ -231,17 +231,13 @@ def run(routes, host='0.0.0.0', port=8080):
             get(self, routes)
 
     server = ThreadedHTTPServer((host, port), RequestHandler)
-    thread = threading.Thread(target=server.serve_forever)
-    thread.daemon = True
-    thread.start()
-    print('HTTP server started on port 8080')
-    while True:
-        from time import sleep
-        sleep(1)
-    server.shutdown()
-    server.start()
-    server.waitForThread()
-
+    try:
+        print('HTTP server started on port 8080')
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print('Shutting down the server...')
+        server.shutdown()
+        server.server_close()
 
 ################################################################################
 #
@@ -329,7 +325,6 @@ class App(object):
                     'size': asks2[0][1]
                 }
             }]
-
 
 ################################################################################
 #
